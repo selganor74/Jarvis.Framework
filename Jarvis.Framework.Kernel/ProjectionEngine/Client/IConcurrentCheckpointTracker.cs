@@ -55,15 +55,10 @@ namespace Jarvis.Framework.Kernel.ProjectionEngine.Client
             IEnumerable<String> projectionNameList,
             Int64 valueCheckpointToken);
 
-		/// <summary>
-		/// Called from standard projection engine to update both value and current
-		/// field for a single projection.
-		/// </summary>
-		/// <param name="projectionName"></param>
-		/// <param name="checkpointToken"></param>
-		/// <returns></returns>
-		Task UpdateProjectionCheckpointAsync(
-			string projectionName,
-			Int64 checkpointToken);
+        /// <summary>
+        /// Force a flush of the in memory checkpoints to the database collection.
+        /// </summary>
+        /// <returns></returns>
+        Task FlushCheckpointCollectionAsync();
     }
 }

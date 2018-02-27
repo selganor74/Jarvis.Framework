@@ -1,15 +1,12 @@
-﻿using Castle.Core.Logging;
-using Jarvis.Framework.Kernel.Events;
+﻿using Jarvis.Framework.Kernel.Events;
+using Jarvis.Framework.Shared.Exceptions;
 using Jarvis.Framework.Shared.Helpers;
 using Jarvis.Framework.Shared.Support;
 using MongoDB.Driver;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jarvis.Framework.Kernel.ProjectionEngine.Client
 {
@@ -43,7 +40,7 @@ namespace Jarvis.Framework.Kernel.ProjectionEngine.Client
                 {
                     var attribute = p.GetCustomAttribute<ProjectionInfoAttribute>();
                     if (attribute == null)
-                        throw new ApplicationException($"Projection type {p.FullName} does not have ProjectionInfoAttribute attribute");
+                        throw new JarvisFrameworkEngineException($"Projection type {p.FullName} does not have ProjectionInfoAttribute attribute");
                     return attribute;
                 });
                 projectionAttributes.AddRange(allProjectionAttributes);
@@ -149,7 +146,10 @@ namespace Jarvis.Framework.Kernel.ProjectionEngine.Client
                         returnValue.NewSlots.Add(slot.Key);
                     }
                     else if (slot.Where(s => s.Checkpoint != null)
-                        .Select(s => s.Checkpoint.Value).Distinct().Count() > 1)
+                        .Select(s => s.Checkpoint.Value)
+                        .Distinct()
+                        .Skip(1)
+                        .Any())
                     {
                         returnValue.SlotsThatNeedsRebuild.Add(slot.Key);
                     }
@@ -233,8 +233,10 @@ namespace Jarvis.Framework.Kernel.ProjectionEngine.Client
         {
             foreach (var projection in GetProjectionIdsFromSlot(slotName))
             {
-                Checkpoint cp = new Checkpoint(projection.CommonName, valueCheckpointToken, projection.Signature);
-                cp.Slot = projection.SlotName;
+                Checkpoint cp = new Checkpoint(projection.CommonName, valueCheckpointToken, projection.Signature)
+                {
+                    Slot = projection.SlotName
+                };
                 _checkpoints.Save(cp, cp.Id);
             }
         }
