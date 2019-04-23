@@ -18,6 +18,10 @@
     <PackageReference Include="Castle.Core" Version="4.4.0" />
     <PackageReference Include="Castle.LoggingFacility" Version="5.0.0" />
     <PackageReference Include="Castle.Windsor" Version="5.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="MongoDB.Driver" Version="2.7.3" />
     <PackageReference Include="NStore.Core" Version="0.8.3" />
     <PackageReference Include="NStore.Domain" Version="0.8.3" />
