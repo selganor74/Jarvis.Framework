@@ -3,6 +3,14 @@ J.A.R.V.I.S. Framework - Proximo srl (c)
 
 # Version 5
 
+# 5.3.0 
+
+- Small update of readme.
+
+# 5.2.0 
+
+- Small change to slot diagnostics functions.
+
 # 5.1.0
 
 - Updated references
